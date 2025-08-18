@@ -8,9 +8,9 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.17.2
   kernelspec:
-    display_name: Python (weatherpro)
+    display_name: WeatherPro
     language: python
-    name: weatherpro
+    name: python3
 ---
 
 <!-- #region editable=true slideshow={"slide_type": ""} -->
@@ -33,17 +33,28 @@ jupyter:
 ```python
 import requests
 import requests_cache
+from pprint import pp
 import json
 import os
 from dotenv import load_dotenv
 ```
 
 ```python
-requests_cache.install_cache("temp_cache", expire_after=3600)
+requests_cache.install_cache("temp_cache", expire_after=7200)
 ```
 
 ```python
 api_url = "https://archive-api.open-meteo.com/v1/archive?latitude=51.414722&longitude=7.167222&start_date=2020-01-01&end_date=2025-01-01&daily=temperature_2m_mean&timezone=Europe%2FBerlin" #Winz-Baak, daily mean (täglicher Durchschnitt) Jan. 2020 - Jan. 2025
-response = requests.get(api_url, 
 
+def fetch_response(api_url):
+    response = requests.get(api_url)
+    response.raise_for_status()
+    return response
+
+response = fetch_response(api_url)
+
+response_json = response.json() 
+
+print(f"Response: {response}")
+pp(response_json, indent=4, depth=3)
 ```
