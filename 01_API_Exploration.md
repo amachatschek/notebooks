@@ -66,3 +66,15 @@ def display_response(response_json):
 
 display_response(response_json)
 ```
+
+```python
+
+
+def zip_time_temp(response_json):
+    time_tuple = tuple(response_json["daily"]["time"])
+    temp_tuple = tuple(response_json["daily"]["temperature_2m_mean"])
+    return tuple(zip(time_tuple, temp_tuple))
+
+
+print(zip_time_temp(response_json)[:5])
+```
