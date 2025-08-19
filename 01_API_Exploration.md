@@ -34,6 +34,7 @@ jupyter:
 import requests
 import requests_cache
 from pprint import pp
+from datetime import datetime
 import json
 import os
 from dotenv import load_dotenv
@@ -46,15 +47,22 @@ requests_cache.install_cache("temp_cache", expire_after=7200)
 ```python
 api_url = "https://archive-api.open-meteo.com/v1/archive?latitude=51.414722&longitude=7.167222&start_date=2020-01-01&end_date=2025-01-01&daily=temperature_2m_mean&timezone=Europe%2FBerlin" #Winz-Baak, daily mean (täglicher Durchschnitt) Jan. 2020 - Jan. 2025
 
+now = datetime.now()
+
 def fetch_response(api_url):
     response = requests.get(api_url)
     response.raise_for_status()
     return response
 
 response = fetch_response(api_url)
-
 response_json = response.json() 
+```
 
-print(f"Response: {response}")
-pp(response_json, indent=4, depth=3)
+```python
+def display_response(response_json):
+    print(f"Response at {now.strftime("%x, %X")} : \n{response}")
+    pp(response_json, indent=2, depth=2)
+    return 
+
+display_response(response_json)
 ```
