@@ -34,7 +34,6 @@ import requests
 import requests_cache
 from pprint import pp
 from datetime import datetime
-import json
 import os
 from dotenv import load_dotenv
 
@@ -56,7 +55,7 @@ now = datetime.now()
 
 def fetch_response(api_url, params):
     """
-    Fetches daily 2m-temperature-mean
+    Fetches API response with given params
     """
     response = requests.get(api_url, params=params)
     response.raise_for_status()
