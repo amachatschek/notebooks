@@ -50,6 +50,9 @@ api_url = "https://archive-api.open-meteo.com/v1/archive?latitude=51.414722&long
 now = datetime.now()
 
 def fetch_response(api_url):
+    """
+    Fetches daily 2m-temperature-mean
+    """
     response = requests.get(api_url)
     response.raise_for_status()
     return response
@@ -60,6 +63,9 @@ response_json = response.json()
 
 ```python
 def display_response(response_json):
+    """
+    Displays HTTP-Response Code, time of generation and JSON body
+    """
     print(f"Response at {now.strftime("%x, %X")} : \n{response}")
     pp(response_json, indent=2, depth=2)
     return 
@@ -71,10 +77,14 @@ display_response(response_json)
 
 
 def zip_time_temp(response_json):
+    """
+    Zips timestamps and mean temperatures into tuples
+    """
     time_tuple = tuple(response_json["daily"]["time"])
     temp_tuple = tuple(response_json["daily"]["temperature_2m_mean"])
     return tuple(zip(time_tuple, temp_tuple))
 
+zip_preview = zip_time_temp(response_json)[:5]
 
-print(zip_time_temp(response_json)[:5])
+print(zip_preview)
 ```
