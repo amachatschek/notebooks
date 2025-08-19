@@ -76,9 +76,8 @@ def display_response(response_json):
 
 display_response(response_json)
 
+
 # %%
-
-
 def zip_time_temp(response_json):
     """
     Zips timestamps and mean temperatures into tuples
