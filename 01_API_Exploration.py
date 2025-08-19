@@ -32,17 +32,62 @@
 # %%
 import requests
 import requests_cache
+from pprint import pp
+from datetime import datetime
 import json
 import os
 from dotenv import load_dotenv
 
 # %%
-requests_cache.install_cache("temp_cache", expire_after=3600)
+requests_cache.install_cache("temp_cache", expire_after=7200)
 
 # %%
-api_url = "https://archive-api.open-meteo.com/v1/archive?latitude=51.414722&longitude=7.167222&start_date=2020-01-01&end_date=2025-01-01&daily=temperature_2m_mean&timezone=Europe%2FBerlin" #Winz-Baak, daily mean (täglicher Durchschnitt) Jan. 2020 - Jan. 2025
+api_url = "https://archive-api.open-meteo.com/v1/archive?"
+params = {
+    "latitude": 51.414722,
+    "longitude": 7.167222,
+    "start_date": "2020-01-01",
+    "end_date": "2025-01-01",
+    "daily": "temperature_2m_mean",
+    "timezone": "Europe/Berlin",
+}
 
-response = requests.get(api_url)
+now = datetime.now()
+
+def fetch_response(api_url, params):
+    """
+    Fetches daily 2m-temperature-mean
+    """
+    response = requests.get(api_url, params=params)
+    response.raise_for_status()
+    return response
+
+response = fetch_response(api_url, params=params)
 response_json = response.json() 
-print(response)
-print(response_json)
+
+
+# %%
+def display_response(response_json):
+    """
+    Displays HTTP-Response Code, time of generation and JSON body
+    """
+    print(f"Response at {now.strftime("%x, %X")} : \n{response}")
+    pp(response_json, indent=2, depth=2)
+    return 
+
+display_response(response_json)
+
+# %%
+
+
+def zip_time_temp(response_json):
+    """
+    Zips timestamps and mean temperatures into tuples
+    """
+    time_tuple = tuple(response_json["daily"]["time"])
+    temp_tuple = tuple(response_json["daily"]["temperature_2m_mean"])
+    return tuple(zip(time_tuple, temp_tuple))
+
+zip_preview = zip_time_temp(response_json)[:5]
+
+print(zip_preview)
