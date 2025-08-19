@@ -39,7 +39,7 @@ import os
 from dotenv import load_dotenv
 
 # %%
-requests_cache.install_cache("temp_cache", expire_after=7200)
+requests_cache.install_cache("temp_cache", expire_after=-1)
 
 # %%
 api_url = "https://archive-api.open-meteo.com/v1/archive?"
@@ -49,7 +49,7 @@ params = {
     "start_date": "2020-01-01",
     "end_date": "2025-01-01",
     "daily": "temperature_2m_mean",
-    "timezone": "Europe/Berlin",
+    "timezone": "Europe/Berlin",    
 }
 
 now = datetime.now()
@@ -91,3 +91,4 @@ def zip_time_temp(response_json):
 zip_preview = zip_time_temp(response_json)[:5]
 
 print(zip_preview)
+print(zip_time_temp(response_json)[-1])
